@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'diary_page.dart';
 import 'mandalart_page.dart';
+import 'drawer_menu.dart';
+import 'Friend/friend_list.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,31 +21,39 @@ class MyApp extends StatelessWidget {
 }
 
 class TodoList extends StatefulWidget {
+  const TodoList({super.key});
+
   @override
   State<TodoList> createState() => _TodoListState();
 }
 
 class _TodoListState extends State<TodoList> {
   List<TodoItem> todos = [];
-  int currentPageIndex = 1; // 초기 페이지는 To-Do List
+  int currentPageIndex = 1;
   PageController pageController = PageController(initialPage: 1);
   TextEditingController todoController = TextEditingController();
+  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
         title: Text('뚜두뚜두'),
+        backgroundColor: Colors.pinkAccent,
         actions: [
           IconButton(
-            icon: Icon(Icons.menu),
+            icon: Icon(Icons.people),
+            color: Colors.white,
             onPressed: () {
-              Scaffold.of(context).openDrawer();
+              scaffoldKey.currentState?.openEndDrawer();
             },
           ),
         ],
       ),
+      drawer: DrawerMenu(),
+      endDrawer: FriendList(),
       body: Column(
         children: [
           Row(
@@ -99,43 +111,13 @@ class _TodoListState extends State<TodoList> {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              title: Text('메뉴 항목 1'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: Text('메뉴 항목 2'),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
       floatingActionButton: currentPageIndex == 1
           ? FloatingActionButton(
         onPressed: () {
           _showAddTodoDialog(context);
         },
-        child: Icon(Icons.add),
+        child: Icon(Icons.add, color: Colors.white,),
+        backgroundColor: Colors.pinkAccent,
       )
           : null,
     );
