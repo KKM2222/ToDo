@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'diary_page.dart';
-import 'mandalart_page.dart';
 import 'drawer_menu.dart';
 import 'Friend/friend_list.dart';
 
@@ -9,7 +8,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class TodoList extends StatefulWidget {
-  const TodoList({super.key});
+  const TodoList({Key? key}) : super(key: key);
 
   @override
   State<TodoList> createState() => _TodoListState();
@@ -55,9 +54,10 @@ class _TodoListState extends State<TodoList> {
       drawer: DrawerMenu(),
       endDrawer: FriendList(),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                 icon: Icon(Icons.arrow_back),
@@ -76,22 +76,12 @@ class _TodoListState extends State<TodoList> {
               Text(
                 currentPageIndex == 0
                     ? "Diary"
-                    : (currentPageIndex == 1 ? "To-Do List" : "Mandalart"),
+                    : (currentPageIndex == 1 ? "To-Do List" : ""),
+                style: TextStyle(
+                  fontSize: 20, // To-Do List 텍스트 크기 조절
+                ),
               ),
-              IconButton(
-                icon: Icon(Icons.arrow_forward),
-                onPressed: () {
-                  if (currentPageIndex < 2) {
-                    setState(() {
-                      currentPageIndex++;
-                    });
-                    pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-              ),
+              SizedBox(width: 40), // 중간과 오른쪽 사이 간격 조절
             ],
           ),
           Expanded(
@@ -105,7 +95,6 @@ class _TodoListState extends State<TodoList> {
               children: [
                 DiaryPage(),
                 TodoPage(todos: todos, onToggle: toggleTodo, onDelete: deleteTodo),
-                MandalartPage(),
               ],
             ),
           ),
@@ -116,7 +105,10 @@ class _TodoListState extends State<TodoList> {
         onPressed: () {
           _showAddTodoDialog(context);
         },
-        child: Icon(Icons.add, color: Colors.white,),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         backgroundColor: Colors.pinkAccent,
       )
           : null,
@@ -225,3 +217,28 @@ class TodoItem {
 
   TodoItem({required this.title, this.isDone = false});
 }
+
+class DiaryPage extends StatelessWidget {
+  const DiaryPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragEnd: (details) {
+        // Swipe to the right
+        if (details.primaryVelocity! > 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TodoList()),
+          );
+        }
+      },
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        ],
+      ),
+    );
+  }
+}
+
