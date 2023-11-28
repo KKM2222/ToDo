@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/login_page.dart';
 import 'drawer_menu.dart';
 
 void main() {
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TodoList(),
+      //home: TodoList(),
+      home: LoginPage(),
     );
   }
 }
