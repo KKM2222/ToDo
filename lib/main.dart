@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'drawer_menu.dart';
-import 'Friend/friend_list.dart';
 
 void main() {
   runApp(MyApp());
@@ -40,18 +39,8 @@ class _TodoListState extends State<TodoList> {
         centerTitle: true,
         title: Text('뚜두뚜두'),
         backgroundColor: Colors.pinkAccent,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.people),
-            color: Colors.white,
-            onPressed: () {
-              scaffoldKey.currentState?.openEndDrawer();
-            },
-          ),
-        ],
       ),
       drawer: DrawerMenu(),
-      endDrawer: FriendList(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -77,10 +66,10 @@ class _TodoListState extends State<TodoList> {
                     ? "Diary"
                     : (currentPageIndex == 1 ? "To-Do List" : ""),
                 style: TextStyle(
-                  fontSize: 20, // To-Do List 텍스트 크기 조절
+                  fontSize: 20,
                 ),
               ),
-              SizedBox(width: 40), // 중간과 오른쪽 사이 간격 조절
+              SizedBox(width: 40),
             ],
           ),
           Expanded(
@@ -224,7 +213,6 @@ class DiaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onHorizontalDragEnd: (details) {
-        // Swipe to the right
         if (details.primaryVelocity! > 0) {
           Navigator.push(
             context,
