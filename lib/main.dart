@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'diary_page.dart';
 import 'drawer_menu.dart';
 import 'Friend/friend_list.dart';
 
@@ -105,11 +104,11 @@ class _TodoListState extends State<TodoList> {
         onPressed: () {
           _showAddTodoDialog(context);
         },
-        child: Icon(
+          backgroundColor: Colors.pinkAccent,
+          child: Icon(
           Icons.add,
           color: Colors.white,
         ),
-        backgroundColor: Colors.pinkAccent,
       )
           : null,
     );
@@ -184,7 +183,7 @@ class TodoPage extends StatelessWidget {
   final Function(int) onToggle;
   final Function(int) onDelete;
 
-  TodoPage({required this.todos, required this.onToggle, required this.onDelete});
+  TodoPage({super.key, required this.todos, required this.onToggle, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
