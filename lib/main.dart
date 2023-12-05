@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:todo/login_page.dart';
 import 'drawer_menu.dart';
 
-void main() {
+void main()async{
+  await initializeDateFormatting();
+
   runApp(MyApp());
 }
 
@@ -47,22 +50,8 @@ class _TodoListState extends State<TodoList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  if (currentPageIndex > 0) {
-                    setState(() {
-                      currentPageIndex--;
-                    });
-                    pageController.previousPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                },
-              ),
               Text(
                 currentPageIndex == 0
                     ? "Diary"

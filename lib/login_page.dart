@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo/my_button.dart';
-import 'package:todo/my_textfield.dart';
+import 'package:todo/my/my_button.dart';
+import 'package:todo/my/my_textfield.dart';
 import 'package:todo/square_title.dart';
-import 'main.dart'; // Replace with the actual import for your main page
+import 'main.dart';
+import 'calendar_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key});
@@ -17,7 +18,8 @@ class LoginPage extends StatelessWidget {
     // For now, let's just navigate to the main page when the sign-in button is pressed
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => TodoList()), // Replace with the actual main page class
+      //MaterialPageRoute(builder: (context) => TodoList()),
+      MaterialPageRoute(builder: (context) => CalendarPage()),// Replace with the actual main page class
     );
   }
 
