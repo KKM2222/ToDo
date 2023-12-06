@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:todo/my/my_button.dart';
 import 'package:todo/my/my_textfield.dart';
 import 'package:todo/square_title.dart';
-import 'main.dart';
 import 'calendar_page.dart';
 
 class LoginPage extends StatelessWidget {
@@ -18,8 +17,7 @@ class LoginPage extends StatelessWidget {
     // For now, let's just navigate to the main page when the sign-in button is pressed
     Navigator.pushReplacement(
       context,
-      //MaterialPageRoute(builder: (context) => TodoList()),
-      MaterialPageRoute(builder: (context) => CalendarPage()),// Replace with the actual main page class
+      MaterialPageRoute(builder: (context) => CalendarPage()),
     );
   }
 
@@ -35,7 +33,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(
                 height: 50,
               ),
-              //todo logo
+              // todo logo
               const Icon(
                 Icons.lock,
                 size: 100,
@@ -120,11 +118,21 @@ class LoginPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SquareTile(imagePath: 'lib/images/google.png'),
-
+                  IconButton(
+                    icon: Image.asset('lib/images/google.png'),
+                    iconSize: 60,
+                    onPressed: () {
+                      //todo 구글 로그인 동작 추가
+                    },
+                  ),
                   SizedBox(width: 25),
-
-                  SquareTile(imagePath: 'lib/images/apple.png')
+                  IconButton(
+                    icon: Image.asset('lib/images/apple.png'),
+                    iconSize: 60,
+                    onPressed: () {
+                      //todo 애플 로그인 동작 추가
+                    },
+                  ),
                 ],
               ),
 
