@@ -1,0 +1,6 @@
+<FrameLayout
+xmlns:android="http://schemas.android.com/apl/res/android"
+android:id = "@+id/widget_root"
+
+
+></FrameLayout>
