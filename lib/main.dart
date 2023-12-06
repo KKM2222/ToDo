@@ -3,7 +3,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:todo/login_page.dart';
 import 'drawer_menu.dart';
 
-void main()async{
+void main() async {
   await initializeDateFormatting();
 
   runApp(MyApp());
@@ -73,7 +73,8 @@ class _TodoListState extends State<TodoList> {
               },
               children: [
                 DiaryPage(),
-                TodoPage(todos: todos, onToggle: toggleTodo, onDelete: deleteTodo),
+                TodoPage(
+                    todos: todos, onToggle: toggleTodo, onDelete: deleteTodo),
               ],
             ),
           ),
@@ -81,15 +82,15 @@ class _TodoListState extends State<TodoList> {
       ),
       floatingActionButton: currentPageIndex == 1
           ? FloatingActionButton(
-        onPressed: () {
-          _showAddTodoDialog(context);
-        },
-          backgroundColor: Colors.pinkAccent,
-          child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-      )
+              onPressed: () {
+                _showAddTodoDialog(context);
+              },
+              backgroundColor: Colors.pinkAccent,
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+            )
           : null,
     );
   }
@@ -163,7 +164,11 @@ class TodoPage extends StatelessWidget {
   final Function(int) onToggle;
   final Function(int) onDelete;
 
-  TodoPage({super.key, required this.todos, required this.onToggle, required this.onDelete});
+  TodoPage(
+      {super.key,
+      required this.todos,
+      required this.onToggle,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -213,10 +218,8 @@ class DiaryPage extends StatelessWidget {
       },
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-        ],
+        children: [],
       ),
     );
   }
 }
-
