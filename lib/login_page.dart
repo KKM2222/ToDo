@@ -3,6 +3,7 @@ import 'package:todo/my/my_button.dart';
 import 'package:todo/my/my_textfield.dart';
 import 'package:todo/square_title.dart';
 import 'calendar_page.dart';
+import 'main.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({Key? key});
@@ -17,7 +18,7 @@ class LoginPage extends StatelessWidget {
     // For now, let's just navigate to the main page when the sign-in button is pressed
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => CalendarPage()),
+      MaterialPageRoute(builder: (context) => MyApp()),
     );
   }
 
