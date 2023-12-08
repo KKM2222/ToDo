@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'calendar_widget.dart'; // calendar_widget.dart 파일을 import
 import 'login_page.dart';
 
 void main() async {
@@ -99,9 +100,32 @@ class _MyAppState extends State<MyApp> {
           );
         },
       ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Container(
+          height: 50.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(Icons.navigate_next),
+                onPressed: () {
+                  // 다른 페이지로 이동하는 코드 추가
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => MyWidget()),
+                  );
+
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
+
 
 class CalendarWidget extends StatelessWidget {
   final Map<DateTime, List<MyEvent>> myEvent;
@@ -210,4 +234,16 @@ class MyEvent {
   String content;
 
   MyEvent(this.date, this.content);
+}
+
+class YourOtherPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Your Other Page')),
+      body: Center(
+        child: Text('Content of your other page'),
+      ),
+    );
+  }
 }
