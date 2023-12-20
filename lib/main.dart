@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'calendar_widget.dart'; // calendar_widget.dart 파일을 import
-import 'login_page.dart';
 
 void main() async {
   await initializeDateFormatting();
@@ -14,7 +12,7 @@ void main() async {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: LoginPage(),
+      home: MyApp(),
     ),
   );
 }
@@ -31,6 +29,13 @@ class _MyAppState extends State<MyApp> {
   DateTime focusedDay = DateTime.now(); // 초기화
   DateTime selectedDay = DateTime.now(); // 초기화
 
+  void _selectDay(DateTime day) {
+    setState(() {
+      selectedDay = day;
+      focusedDay = day;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +44,10 @@ class _MyAppState extends State<MyApp> {
         margin: EdgeInsets.symmetric(horizontal: 10),
         child: CalendarWidget(
           myEvent: myEvent,
-          focusedDay: focusedDay, // 전달
-          selectedDay: selectedDay, // 전달
-          onDayPressed: (DateTime datetime) {
-            setState(() {
-              selectedDay = datetime; // 선택된 날짜 업데이트
-            });
-          },
+          focusedDay: focusedDay,
+          selectedDay: selectedDay,
+          onDayPressed: _selectDay, // _selectDay 함수로 변경
+          deleteEvent: _deleteEvent,
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -100,44 +102,30 @@ class _MyAppState extends State<MyApp> {
           );
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        child: Container(
-          height: 50.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: Icon(Icons.navigate_next),
-                onPressed: () {
-                  // 다른 페이지로 이동하는 코드 추가
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => MyWidget()),
-                  );
-
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+  }
+
+  // _selectDay 함수를 사용하여 selectedDay 업데이트
+  void _deleteEvent(MyEvent event) {
+    setState(() {
+      myEvent[event.date]?.remove(event);
+    });
   }
 }
 
-
 class CalendarWidget extends StatelessWidget {
   final Map<DateTime, List<MyEvent>> myEvent;
-  late final DateTime focusedDay;
-  late final DateTime selectedDay;
+  final DateTime focusedDay;
+  final DateTime selectedDay;
   final Function(DateTime) onDayPressed;
+  final Function(MyEvent) deleteEvent;
 
   CalendarWidget({
     required this.myEvent,
     required this.focusedDay,
     required this.selectedDay,
     required this.onDayPressed,
+    required this.deleteEvent,
   });
 
   @override
@@ -155,6 +143,7 @@ class CalendarWidget extends StatelessWidget {
           },
           onDaySelected: (selectedDay, focusedDay) {
             onDayPressed(selectedDay);
+            selectedDay = selectedDay;
           },
           headerStyle: HeaderStyle(
             titleCentered: true,
@@ -180,16 +169,16 @@ class CalendarWidget extends StatelessWidget {
             ),
           ),
           calendarStyle: CalendarStyle(
-            weekendTextStyle: TextStyle(color: Colors.red), // 주말 텍스트 스타일
+            weekendTextStyle: TextStyle(color: Colors.red),
             rowDecoration: BoxDecoration(
               shape: BoxShape.circle,
             ),
-            markersMaxCount: 3, // 각 날짜에 표시될 마커의 최대 수
-            markersAutoAligned: true,// 마커가 날짜 아래에 나타나도록 설정
-            canMarkersOverflow : false,
-            markersOffset : const PositionedOffset(),
-            markersAlignment: Alignment.bottomCenter, // 마커의 정렬 위치
-            markerDecoration : const BoxDecoration(
+            markersMaxCount: 3,
+            markersAutoAligned: true,
+            canMarkersOverflow: false,
+            markersOffset: const PositionedOffset(),
+            markersAlignment: Alignment.bottomCenter,
+            markerDecoration: const BoxDecoration(
               color: Colors.black,
               shape: BoxShape.circle,
             ),
@@ -200,31 +189,33 @@ class CalendarWidget extends StatelessWidget {
             itemCount: myEvent[selectedDay] != null ? myEvent[selectedDay]!.length : 0,
             itemBuilder: (BuildContext context, int index) {
               MyEvent event = myEvent[selectedDay]![index];
-              return Container(
-                margin: EdgeInsets.only(bottom: 8),
-                color: Colors.grey.shade300,
+              return Dismissible(
+                key: Key(event.content),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) {
+                  deleteEvent(event);
+                },
+                background: Container(
+                  alignment: AlignmentDirectional.centerEnd,
+                  color: Colors.red,
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 16),
+                    child: Icon(Icons.delete, color: Colors.white),
+                  ),
+                ),
                 child: ListTile(
-                  title: Text(event.content, style: TextStyle(color: Colors.black)),
+                  leading: Icon(Icons.circle, color: Colors.red,),
+                  title: Container(
+                    child: Text(
+                        event.content,
+                        style: TextStyle(color: Colors.black, fontSize: 40)),
+                  ),
                 ),
               );
             },
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildEventsMarker(List<MyEvent> events) {
-    return Container(
-      padding: EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.red,
-      ),
-      child: Text(
-        events.length.toString(),
-        style: TextStyle(color: Colors.white),
-      ),
     );
   }
 }
@@ -234,16 +225,4 @@ class MyEvent {
   String content;
 
   MyEvent(this.date, this.content);
-}
-
-class YourOtherPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Your Other Page')),
-      body: Center(
-        child: Text('Content of your other page'),
-      ),
-    );
-  }
 }
