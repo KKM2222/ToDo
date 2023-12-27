@@ -5,7 +5,9 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:todo/calendar_widget.dart';
 
 void main() async {
+  // 날짜 형식 초기화
   await initializeDateFormatting();
+
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -26,10 +28,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  // 날짜와 해당 날짜의 이벤트 목록을 저장하는 맵
   Map<DateTime, List<MyEvent>> myEvent = {};
   DateTime focusedDay = DateTime.now(); // 초기화
   DateTime selectedDay = DateTime.now(); // 초기화
 
+  // 날짜 선택 시 호출되는 함수
   void _selectDay(DateTime day) {
     setState(() {
       selectedDay = day;
@@ -40,7 +44,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Toast-It')),
+      appBar: AppBar(title: Text('Toast-It'),
+      centerTitle: true,),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 10),
         child: CalendarWidget(
@@ -243,29 +248,29 @@ class CalendarWidget extends StatelessWidget {
             weekendTextStyle: TextStyle(color: Colors.red),
             rowDecoration: BoxDecoration(
               shape: BoxShape.circle,
-              ),
             ),
+          ),
           calendarBuilders: CalendarBuilders(
-            markerBuilder: (context, day, event){
-              bool hasEvents = myEvent[day] != null && myEvent[day]!.isNotEmpty;
-              if (hasEvents) {
-                return Positioned(
-                  bottom: 1,
-                  child: Container(
-                    height: 8,
-                    width: 8,
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+              markerBuilder: (context, day, event){
+                bool hasEvents = myEvent[day] != null && myEvent[day]!.isNotEmpty;
+                if (hasEvents) {
+                  return Positioned(
+                    bottom: 1,
+                    child: Container(
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
                     ),
-                  ),
-                );
-              }else {
-                return Container();
+                  );
+                } else {
+                  return Container();
+                }
               }
-            }
           ),
-          ),
+        ),
         Expanded(
           child: ListView.builder(
             itemCount: myEvent[selectedDay] != null ? myEvent[selectedDay]!.length : 0,
