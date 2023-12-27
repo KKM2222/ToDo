@@ -48,6 +48,7 @@ class _MyAppState extends State<MyApp> {
           selectedDay: selectedDay,
           onDayPressed: _selectDay, // _selectDay 함수로 변경
           deleteEvent: _deleteEvent,
+          editEvent: _editEvent, // 추가: 수정 기능
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -105,7 +106,56 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // _selectDay 함수를 사용하여 selectedDay 업데이트
+  // 추가: _editEvent 함수
+  void _editEvent(MyEvent event) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController contentController = TextEditingController();
+        contentController.text = event.content;
+
+        return AlertDialog(
+          title: const Text("일정 수정"),
+          content: Container(
+            height: 100,
+            child: Column(
+              children: [
+                Text(
+                  DateFormat("yyyy-MM-dd").format(event.date),
+                  style: TextStyle(fontSize: 16),
+                ),
+                TextField(
+                  controller: contentController,
+                  style: TextStyle(fontSize: 20),
+                  decoration: InputDecoration(labelText: '일정'),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                String updatedContent = contentController.value.text;
+                setState(() {
+                  event.content = updatedContent;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text("수정"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("취소"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // 추가: _deleteEvent 함수
   void _deleteEvent(MyEvent event) {
     setState(() {
       myEvent[event.date]?.remove(event);
@@ -119,6 +169,7 @@ class CalendarWidget extends StatelessWidget {
   final DateTime selectedDay;
   final Function(DateTime) onDayPressed;
   final Function(MyEvent) deleteEvent;
+  final Function(MyEvent) editEvent; // 추가: 수정 기능
 
   CalendarWidget({
     required this.myEvent,
@@ -126,6 +177,7 @@ class CalendarWidget extends StatelessWidget {
     required this.selectedDay,
     required this.onDayPressed,
     required this.deleteEvent,
+    required this.editEvent, // 추가: 수정 기능
   });
 
   @override
@@ -172,44 +224,59 @@ class CalendarWidget extends StatelessWidget {
             weekendTextStyle: TextStyle(color: Colors.red),
             rowDecoration: BoxDecoration(
               shape: BoxShape.circle,
+              ),
             ),
-            markersMaxCount: 3,
-            markersAutoAligned: true,
-            canMarkersOverflow: false,
-            markersOffset: const PositionedOffset(),
-            markersAlignment: Alignment.bottomCenter,
-            markerDecoration: const BoxDecoration(
-              color: Colors.black,
-              shape: BoxShape.circle,
-            ),
+          calendarBuilders: CalendarBuilders(
+            markerBuilder: (context, day, event){
+              bool hasEvents = myEvent[day] != null && myEvent[day]!.isNotEmpty;
+              if (hasEvents) {
+                return Positioned(
+                  bottom: 1,
+                  child: Container(
+                    height: 8,
+                    width: 8,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                );
+              }else {
+                return Container();
+              }
+            }
           ),
-        ),
+          ),
         Expanded(
           child: ListView.builder(
             itemCount: myEvent[selectedDay] != null ? myEvent[selectedDay]!.length : 0,
             itemBuilder: (BuildContext context, int index) {
               MyEvent event = myEvent[selectedDay]![index];
-              return Dismissible(
-                key: Key(event.content),
-                direction: DismissDirection.endToStart,
-                onDismissed: (direction) {
-                  deleteEvent(event);
-                },
-                background: Container(
-                  alignment: AlignmentDirectional.centerEnd,
-                  color: Colors.red,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: Icon(Icons.delete, color: Colors.white),
-                  ),
-                ),
-                child: ListTile(
-                  leading: Icon(Icons.circle, color: Colors.red,),
-                  title: Container(
-                    child: Text(
+              return ListTile(
+                leading: Icon(Icons.circle, color: Colors.red,),
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
                         event.content,
-                        style: TextStyle(color: Colors.black, fontSize: 40)),
-                  ),
+                        style: TextStyle(color: Colors.black, fontSize: 40),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.edit, color: Colors.blue),
+                      onPressed: () {
+                        // 수정 아이콘 탭 시 수정 이벤트 호출
+                        editEvent(event);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.red),
+                      onPressed: () {
+                        // 삭제 아이콘 탭 시 삭제 이벤트 호출
+                        deleteEvent(event);
+                      },
+                    ),
+                  ],
                 ),
               );
             },
