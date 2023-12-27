@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -15,9 +17,50 @@ void main() async {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: MyApp(),
+      home: SplashScreen(),
     ),
   );
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 2), () {
+      // 3초 후에 MyApp으로 이동
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (BuildContext context) => MyApp(),
+        ),
+      );
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              '뜨끈뜨끈한 Toast-It!',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 16.0),
+            CircularProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatefulWidget {
