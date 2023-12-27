@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:todo/calendar_widget.dart';
 
 void main() async {
   await initializeDateFormatting();
@@ -51,10 +52,16 @@ class _MyAppState extends State<MyApp> {
           editEvent: _editEvent, // 추가: 수정 기능
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add, color: Colors.white),
-        onPressed: () async {
-          await showDialog(
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+      FloatingActionButton(
+      child: Icon(Icons.add, color: Colors.white),
+      onPressed: () async {
+        // 기존의 "+" 아이콘에 대한 기능 추가
+        await showDialog(
             context: context,
             builder: (BuildContext context) {
               TextEditingController contentController = TextEditingController();
@@ -103,9 +110,21 @@ class _MyAppState extends State<MyApp> {
           );
         },
       ),
+    SizedBox(height: 16), // 간격 조절
+    FloatingActionButton(
+    child: Icon(Icons.star, color: Colors.white),
+      onPressed: () {
+        // 다른 페이지로 이동하는 코드 추가
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => MyWidget()),
+        );
+
+      },
+    ),
+          ],
+      ),
     );
   }
-
   // 추가: _editEvent 함수
   void _editEvent(MyEvent event) async {
     await showDialog(
@@ -292,4 +311,16 @@ class MyEvent {
   String content;
 
   MyEvent(this.date, this.content);
+}
+
+class YourOtherPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Your Other Page')),
+      body: Center(
+        child: Text('Content of your other page'),
+      ),
+    );
+  }
 }
