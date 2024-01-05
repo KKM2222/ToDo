@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:todo/calendar_widget.dart';
+import 'package:todo/start_page.dart';
 
 void main() async {
   // 날짜 형식 초기화
@@ -17,50 +16,9 @@ void main() async {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: SplashScreen(),
+      home: StartPage(),
     ),
   );
-}
-
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 2), () {
-      // 3초 후에 MyApp으로 이동
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (BuildContext context) => MyApp(),
-        ),
-      );
-    });
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Text(
-              '뜨끈뜨끈한 Toast-It!',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 16.0),
-            CircularProgressIndicator(),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class MyApp extends StatefulWidget {
@@ -75,20 +33,25 @@ class _MyAppState extends State<MyApp> {
   Map<DateTime, List<MyEvent>> myEvent = {};
   DateTime focusedDay = DateTime.now(); // 초기화
   DateTime selectedDay = DateTime.now(); // 초기화
+  String currentMonth = DateFormat('M월').format(DateTime.now());
 
   // 날짜 선택 시 호출되는 함수
   void _selectDay(DateTime day) {
     setState(() {
       selectedDay = day;
       focusedDay = day;
+      currentMonth = DateFormat('M월').format(day); // 선택된 날짜에 따라 월 갱신
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Toast-It'),
-      centerTitle: true,),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(currentMonth, style: TextStyle(color: Colors.black, fontSize: 40),),
+        elevation: 0,
+      ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 10),
         child: CalendarWidget(
@@ -267,18 +230,20 @@ class CalendarWidget extends StatelessWidget {
           headerStyle: HeaderStyle(
             titleCentered: true,
             titleTextFormatter: (date, locale) =>
-                DateFormat.yMMMMd(locale).format(date),
+                DateFormat.yMMMM(locale).format(date), // yyyy년 MM월 형식으로 표시
             formatButtonVisible: false,
             titleTextStyle: const TextStyle(
-              fontSize: 20.0, color: Colors.blue,
+              fontSize: 20.0, color: Colors.black,
             ),
             headerPadding: const EdgeInsets.symmetric(vertical: 4.0),
             leftChevronIcon: const Icon(
               Icons.arrow_left,
+              color: Colors.black,
               size: 40.0,
             ),
             rightChevronIcon: const Icon(
               Icons.arrow_right,
+              color: Colors.black,
               size: 40.0,
             ),
             formatButtonTextStyle: TextStyle().copyWith(color: Colors.white, fontSize: 15.0),
@@ -288,6 +253,7 @@ class CalendarWidget extends StatelessWidget {
             ),
           ),
           calendarStyle: CalendarStyle(
+            defaultTextStyle: TextStyle(fontSize: 16, color: Colors.black),
             weekendTextStyle: TextStyle(color: Colors.red),
             rowDecoration: BoxDecoration(
               shape: BoxShape.circle,
