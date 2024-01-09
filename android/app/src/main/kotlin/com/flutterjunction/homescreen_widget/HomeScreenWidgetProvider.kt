@@ -1,5 +1,4 @@
 package com.flutterjunction.homescreen_widget  // your package name
-
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences

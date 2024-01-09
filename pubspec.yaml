@@ -29,17 +29,18 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   google_sign_in: ^6.1.6
-  home_widget: ^0.4.0
   flutter:
     sdk: flutter
   provider: ^5.0.0
   table_calendar: ^3.0.9
+  home_widget: ^0.4.1
   intl: ^0.18.1
   drift:
   sqlite3_flutter_libs:
   path_provider:
   flutter_calendar_carousel: ^2.4.2
   flutter_slidable:
+
 
 dependecy_overrides:
   path: ^1.8.1
