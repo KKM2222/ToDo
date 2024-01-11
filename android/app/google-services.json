@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "315184952882",
+    "project_id": "toastit-92716",
+    "storage_bucket": "toastit-92716.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315184952882:android:21303ed5bf66b1279d2e2b",
+        "android_client_info": {
+          "package_name": "com.flutterjunction.homescreen_widget"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315184952882-790tn73eairnt9jnp5pd4o4nlt7099r7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.flutterjunction.homescreen_widget",
+            "certificate_hash": "9e430589884d3ab9016cee00121d174992a90105"
+          }
+        },
+        {
+          "client_id": "315184952882-0pl0pf12a86pj5k8rlsu5gb1lmhc875t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZCgh_Su9OJX6RdFvE5o0vySwQVcSis8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315184952882-0pl0pf12a86pj5k8rlsu5gb1lmhc875t.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "315184952882-0cnhnbomb3um630uamaotp7ug1lgrl7c.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.todo.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
